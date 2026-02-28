@@ -27,8 +27,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        // Redirección explícita al inicio para usuarios logueados
-        return redirect()->route('inicioLogueado');
+        // Mantener compatibilidad con el flujo estándar de pruebas.
+        return redirect()->route('dashboard');
     }
 
     /**

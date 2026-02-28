@@ -15,6 +15,7 @@ use App\Http\Controllers\PublicPinsController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ProfileController;
 
 // Rutas para manejo de imágenes
 Route::middleware(['auth'])->group(function () {
@@ -42,6 +43,15 @@ Route::get('/test', function () {
 Route::get('/homefeed', [indexController::class, 'index']);
 
 Route::get('/', [inicioController::class, 'inicio']);
+Route::get('/dashboard', fn () => redirect()->route('inicioLogueado'))
+    ->middleware(['auth'])
+    ->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 Route::get('/inicio', [inicioController::class, 'inicio'])->name('inicio');
 

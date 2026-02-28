@@ -15,6 +15,9 @@ Route::middleware('guest')->group(function () {
     Route::get('registro', [RegisteredUserController::class, 'registro'])
         ->name('registro');
 
+    Route::get('register', [RegisteredUserController::class, 'registro'])
+        ->name('register.form');
+
     Route::post('register', [RegisteredUserController::class, 'register'])
         ->name('register');
 

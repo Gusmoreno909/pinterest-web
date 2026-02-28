@@ -39,13 +39,13 @@ class RegisteredUserController extends Controller
         $request->validate([
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
-            'date'=>['required']
+            'date' => ['nullable', 'date'],
         ]);
 
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'date'=> $request->date 
+            'date' => $request->input('date') ?: now()->toDateString(),
         ]);
 
         // Crear perfil de usuario con username opcional
@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
     // Regenerar sesión para prevenir fijación y asegurar persistencia de la bandera
     $request->session()->regenerate();
 
-        return redirect()->route('inicioLogueado');
+        return redirect()->route('dashboard');
     }
 
     public function Userprofile(){
