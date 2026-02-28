@@ -15,7 +15,19 @@ return new class extends Migration
             return;
         }
 
-        DB::statement('ALTER TABLE users ALTER COLUMN email TYPE VARCHAR(255)');
+        $driver = DB::getDriverName();
+
+        if ($driver === 'pgsql') {
+            DB::statement('ALTER TABLE users ALTER COLUMN email TYPE VARCHAR(255)');
+            return;
+        }
+
+        if ($driver === 'mysql' || $driver === 'mariadb') {
+            DB::statement('ALTER TABLE users MODIFY email VARCHAR(255)');
+            return;
+        }
+
+        // SQLite already stores text dynamically; no-op for tests.
     }
 
     /**
@@ -27,6 +39,18 @@ return new class extends Migration
             return;
         }
 
-        DB::statement('ALTER TABLE users ALTER COLUMN email TYPE VARCHAR(50)');
+        $driver = DB::getDriverName();
+
+        if ($driver === 'pgsql') {
+            DB::statement('ALTER TABLE users ALTER COLUMN email TYPE VARCHAR(50)');
+            return;
+        }
+
+        if ($driver === 'mysql' || $driver === 'mariadb') {
+            DB::statement('ALTER TABLE users MODIFY email VARCHAR(50)');
+            return;
+        }
+
+        // SQLite no-op for symmetry with up().
     }
 };
